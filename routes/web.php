@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\CompanyController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +14,4 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/',function () {
-    return view('welcome');
-});
+Route::resource('company',CompanyController::class);
