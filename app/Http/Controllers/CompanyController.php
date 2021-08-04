@@ -39,7 +39,7 @@ class CompanyController extends Controller
      */
     public function store(CompanyRequest $request)
     {
-        Company::create($request->validated());
+        auth()->user()->company()->create($request->validated());
 
         return redirect(route('company.index'));
     }
@@ -50,8 +50,10 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Company $company)
+    public function show($id)
     {
+        $company = Company::with('employee')->find($id);
+
         return view('company.show',compact('company'));
     }
 

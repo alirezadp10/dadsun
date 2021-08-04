@@ -1,28 +1,26 @@
 @extends('layout')
 @section('title')
-    <title>Companies</title>
+    <title>Employees</title>
 @endsection
 @section('body')
-
     <div class="container">
 
         <a class="btn btn-primary float-right"
-           href="{{ route('company.create') }}"
+           href="{{ route('employee.create') }}"
            role="button">create</a>
 
-        <h2 class="mb-3 mt-3">Companies List</h2>
+        <h2 class="mb-3 mt-3">Employees List</h2>
 
         <ul class="list-group mt-4">
-            @foreach ($companies as $company)
+            @foreach ($employees as $employee)
                 <li class="list-group-item">
-                    <a href="{{ route('company.show',$company->id) }}">
-                        {{ $company->name }}
+                    <a href="{{ route('employee.show',$employee->id) }}">
+                        {{ $employee->full_name }}
                     </a>
                 </li>
             @endforeach
         </ul>
     </div>
 
-    {{ $companies->links() }}
-
+    {{ $employees->links() }}
 @endsection

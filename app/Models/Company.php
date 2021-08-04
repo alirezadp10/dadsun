@@ -14,4 +14,14 @@ class Company extends Model
         'email',
         'url',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function employee()
+    {
+        return $this->hasMany(Employee::class);
+    }
 }
