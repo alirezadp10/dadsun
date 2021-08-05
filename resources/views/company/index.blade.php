@@ -10,6 +10,10 @@
            href="{{ route('company.create') }}"
            role="button">create</a>
 
+        <a class="btn btn-info float-right mr-2"
+           href="{{ route('company.export') }}"
+           role="button">export</a>
+
         <h2 class="mb-3 mt-3">Companies List</h2>
 
         <ul class="list-group mt-4">

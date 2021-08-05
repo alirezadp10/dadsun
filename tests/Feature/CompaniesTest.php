@@ -27,7 +27,7 @@ class CompaniesTest extends TestCase
 
         $this->post(route('company.store'),$data)->assertRedirect(route('company.index'));
 
-        $data['logo'] = 'images/company/'.$data['logo']->hashName();
+        $data['logo'] = 'images/company/' . $data['logo']->hashName();
 
         Storage::disk('public')->assertExists($data['logo']);
 
@@ -47,7 +47,7 @@ class CompaniesTest extends TestCase
 
         $this->patch(route('company.update',$company->id),$data)->assertRedirect(route('company.show',$company->id));
 
-        $data['logo'] = 'images/company/'.$data['logo']->hashName();
+        $data['logo'] = 'images/company/' . $data['logo']->hashName();
 
         Storage::disk('public')->assertExists($data['logo']);
 
@@ -108,5 +108,31 @@ class CompaniesTest extends TestCase
         $this->post(route('company.store'),$data);
 
         Mail::assertSent(CompanyCreated::class);
+    }
+
+    /**
+     * @test
+     */
+    public function companies_could_be_exported()
+    {
+        $companies = \App\Models\Company::factory()->count(10)->create();
+
+        $response = $this->get(route('company.export'));
+
+        $response->assertJson([
+            'total' => 10,
+        ]);
+
+        $response->assertJsonStructure([
+            'data' => [
+                [
+                    'name',
+                    'url',
+                    'email',
+                    'logo',
+                    'employee' => [],
+                ],
+            ],
+        ]);
     }
 }

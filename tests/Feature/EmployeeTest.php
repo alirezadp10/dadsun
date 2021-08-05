@@ -78,4 +78,30 @@ class EmployeeTest extends TestCase
 
         $this->assertDatabaseMissing('employees',$employee->toArray());
     }
+
+    /**
+     * @test
+     */
+    public function employee_could_be_exported()
+    {
+        $employees = \App\Models\Employee::factory()->count(10)->create();
+
+        $response = $this->get(route('employee.export'));
+
+        $response->assertJson([
+            'total' => 10,
+        ]);
+
+        $response->assertJsonStructure([
+            'data' => [
+                [
+                    'first_name',
+                    'last_name',
+                    'email',
+                    'telephone',
+                ],
+            ],
+        ]);
+
+    }
 }
