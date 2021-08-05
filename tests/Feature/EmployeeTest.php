@@ -70,6 +70,8 @@ class EmployeeTest extends TestCase
      */
     public function employee_can_be_deleted()
     {
+        $this->signIn();
+
         $employee = \App\Models\Employee::factory()->create();
 
         $this->delete(route('employee.destroy',$employee->id))->assertRedirect(route('employee.index'));

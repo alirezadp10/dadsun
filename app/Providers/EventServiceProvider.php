@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\CompanyWasCreatedEvent;
+use App\Listeners\SendEmailWhenCompanyWasCreatedListener;
 use App\Models\Company;
 use App\Observers\CompanyObserver;
 use Illuminate\Auth\Events\Registered;
@@ -19,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        CompanyWasCreatedEvent::class => [
+            SendEmailWhenCompanyWasCreatedListener::class,
         ],
     ];
 

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CompanyWasCreatedEvent;
 use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
-use Illuminate\Http\Request;
-use phpDocumentor\Reflection\Types\This;
 
 class CompanyController extends Controller
 {
@@ -40,6 +39,10 @@ class CompanyController extends Controller
     public function store(CompanyRequest $request)
     {
         auth()->user()->company()->create($request->validated());
+
+        session()->flash('message','Congratulations! company was registerd.');
+
+        CompanyWasCreatedEvent::dispatch($request->user());
 
         return redirect(route('company.index'));
     }

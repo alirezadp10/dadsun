@@ -7,11 +7,6 @@ use Illuminate\Support\Facades\Storage;
 
 class CompanyObserver
 {
-    public function created(Company $company)
-    {
-        //
-    }
-
     public function updated(Company $company)
     {
         if (isset($company->getChanges()['logo'])) {

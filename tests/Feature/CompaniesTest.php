@@ -2,11 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Mail\CompanyCreated;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -83,10 +85,28 @@ class CompaniesTest extends TestCase
      */
     public function company_can_be_deleted()
     {
+        $this->signIn()->withoutExceptionHandling();
+
         $company = \App\Models\Company::factory()->create();
 
         $this->delete(route('company.destroy',$company->id))->assertRedirect(route('company.index'));
 
         $this->assertDatabaseMissing('companies',$company->toArray());
+    }
+
+    /**
+     * @test
+     */
+    public function when_company_was_created_an_email_must_be_send()
+    {
+        Mail::fake();
+
+        $this->signIn();
+
+        $data = \App\Models\Company::factory(['user_id' => auth()->id()])->raw();
+
+        $this->post(route('company.store'),$data);
+
+        Mail::assertSent(CompanyCreated::class);
     }
 }
