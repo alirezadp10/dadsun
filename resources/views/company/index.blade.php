@@ -6,9 +6,11 @@
 
     <div class="container">
 
-        <a class="btn btn-primary float-right"
-           href="{{ route('company.create') }}"
-           role="button">create</a>
+        @auth()
+            <a class="btn btn-primary float-right"
+               href="{{ route('company.create') }}"
+               role="button">create</a>
+        @endauth
 
         <a class="btn btn-info float-right mr-2"
            href="{{ route('company.export') }}"

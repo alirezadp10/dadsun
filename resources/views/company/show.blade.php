@@ -6,9 +6,35 @@
 
     <div class="container">
 
-        <h2 class="mb-3 mt-3">Show Company</h2>
+        @auth()
 
-        <img src="{{ $company->logo }}" class="img img-responsive">
+            @if($company->user_id == auth()->id())
+
+                <a class="btn btn-warning float-right mt-3"
+                   href="{{ route('company.edit',$company->id) }}"
+                   role="button">edit</a>
+
+                <a class="btn btn-danger float-right mr-2 mt-3"
+                   href="{{ route('company.destroy',$company->id) }}"
+                   onclick="event.preventDefault();document.getElementById('delete-company').submit();"
+                   role="button">delete</a>
+
+                <form id="delete-company"
+                      action="{{ route('company.destroy',$company->id) }}"
+                      method="POST"
+                      hidden>
+                    @method('DELETE')
+                    @csrf
+                </form>
+
+            @endif
+
+        @endauth
+
+        <h2 class="mb-5 mt-3 inline">Show Company</h2>
+
+        <img src="{{ $company->logo }}"
+             class="img img-responsive">
 
         <ul class="list-group mt-2">
             <li class="list-group-item">
@@ -22,7 +48,7 @@
             </li>
         </ul>
 
-        <h4 class="mb-3 mt-4">Employees</h4>
+        <h4 class="mb-3 mt-4">Employees:</h4>
 
         <ul class="list-group mt-2">
             @foreach($company->employee as $employee)
@@ -32,23 +58,11 @@
             @endforeach
         </ul>
 
-        <a class="btn btn-warning fixed mt-3"
-           href="{{ route('company.edit',$company->id) }}"
-           role="button">edit</a>
+        @include('partials.comments',['comments' => $company->comments])
 
-        <a class="btn btn-danger fixed mt-3"
-           href="{{ route('company.destroy',$company->id) }}"
-           onclick="event.preventDefault();document.getElementById('delete-company').submit();"
-           role="button">delete</a>
-
-        <form id="delete-company"
-              action="{{ route('company.destroy',$company->id) }}"
-              method="POST"
-              hidden>
-            @method('DELETE')
-            @csrf
-        </form>
-
+        @auth()
+            @include('partials.comment-form',['commentable_id' => $company->id , 'commentable_type' => 'company' ])
+        @endauth
     </div>
 
 @endsection

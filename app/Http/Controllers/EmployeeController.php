@@ -31,8 +31,10 @@ class EmployeeController extends Controller
         return redirect(route('employee.index'));
     }
 
-    public function show(Employee $employee)
+    public function show($id)
     {
+        $employee = Employee::with('comments')->find($id);
+
         return view('employee.show',compact('employee'));
     }
 

@@ -27,4 +27,8 @@ class Employee extends Model
         return $this->first_name . " " . $this->last_name;
     }
 
+    public function comments()
+    {
+        return $this->morphMany(Comment::class,'commentable')->latest()->take(2);
+    }
 }

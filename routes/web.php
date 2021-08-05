@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 require __DIR__.'/auth.php';
+
+Route::redirect('/','/company');
 
 Route::patch('company/{company}',[CompanyController::class,'update'])->name('company.update')->middleware(['auth','edit.information']);
 Route::post('company',[CompanyController::class,'store'])->name('company.store')->middleware(['auth']);
@@ -34,3 +37,5 @@ Route::get('employee/create',[EmployeeController::class,'create'])->name('employ
 Route::get('employee/export',[EmployeeController::class,'export'])->name('employee.export');
 Route::get('employee/{employee}',[EmployeeController::class,'show'])->name('employee.show');
 Route::get('employee',[EmployeeController::class,'index'])->name('employee.index');
+
+Route::post('comment',[CommentController::class,'store'])->name('comment.store')->middleware(['auth']);

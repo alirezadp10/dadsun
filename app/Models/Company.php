@@ -21,16 +21,16 @@ class Company extends Model
 
     public function setLogoAttribute($value)
     {
-        $image = Image::make($value)->resize(150, 150);
+        $image = Image::make($value)->resize(150,150);
 
         $this->attributes['logo'] = sprintf('images/company/%s',$value->hashName());
 
-        Storage::disk('public')->put($this->attributes['logo'], $image->encode());
+        Storage::disk('public')->put($this->attributes['logo'],$image->encode());
     }
 
     public function getLogoAttribute($value)
     {
-        return $value ? asset('storage/'.$value) : asset('images/default/company.png');
+        return $value ? asset('storage/' . $value) : asset('images/default/company.png');
     }
 
     public function user()
@@ -41,5 +41,10 @@ class Company extends Model
     public function employee()
     {
         return $this->hasMany(Employee::class);
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class,'commentable')->latest()->take(2);
     }
 }

@@ -34,7 +34,7 @@ class CompanyController extends Controller
 
     public function show($id)
     {
-        $company = Company::with('employee')->find($id);
+        $company = Company::with('employee','comments')->find($id);
 
         return view('company.show',compact('company'));
     }
@@ -44,7 +44,7 @@ class CompanyController extends Controller
         return view('company.edit',compact('company'));
     }
 
-    public function update(CompanyRequest $request, Company $company)
+    public function update(CompanyRequest $request,Company $company)
     {
         $company->update($request->validated());
 

@@ -5,7 +5,32 @@
 @section('body')
     <div class="container">
 
-        <h2 class="mb-3 mt-3">Show Employee</h2>
+        @auth()
+
+            @if($employee->company->user_id == auth()->id())
+
+                <a class="btn btn-warning float-right mt-3"
+                   href="{{ route('employee.edit',$employee->id) }}"
+                   role="button">edit</a>
+
+                <a class="btn btn-danger float-right mt-3 mr-2"
+                   href="{{ route('employee.destroy',$employee->id) }}"
+                   onclick="event.preventDefault();document.getElementById('delete-employee').submit();"
+                   role="button">delete</a>
+
+                <form id="delete-employee"
+                      action="{{ route('employee.destroy',$employee->id) }}"
+                      method="POST"
+                      hidden>
+                    @method('DELETE')
+                    @csrf
+                </form>
+
+            @endif
+
+        @endauth
+
+        <h2 class="mb-5 mt-3 inline">Show Employee</h2>
 
         <ul class="list-group mt-2">
             <li class="list-group-item">
@@ -25,22 +50,12 @@
             </li>
         </ul>
 
-        <a class="btn btn-warning fixed mt-3"
-           href="{{ route('employee.edit',$employee->id) }}"
-           role="button">edit</a>
+        @include('partials.comments',['comments' => $employee->comments])
 
-        <a class="btn btn-danger fixed mt-3"
-           href="{{ route('employee.destroy',$employee->id) }}"
-           onclick="event.preventDefault();document.getElementById('delete-employee').submit();"
-           role="button">delete</a>
+        @auth()
+            @include('partials.comment-form',['commentable_id' => $employee->id , 'commentable_type' => 'employee' ])
+        @endauth
 
-        <form id="delete-employee"
-              action="{{ route('employee.destroy',$employee->id) }}"
-              method="POST"
-              hidden>
-            @method('DELETE')
-            @csrf
-        </form>
 
     </div>
 @endsection
