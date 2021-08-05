@@ -10,6 +10,7 @@
         <div class="card border-black mt-4 mb-4">
             <div class="card-body">
                 <form action="{{ route('company.update',$company->id) }}"
+                      enctype="multipart/form-data"
                       method="POST">
                     @csrf
                     @method('PATCH')
@@ -39,6 +40,14 @@
                                class="form-control"
                                id="url"
                                placeholder="Enter url address">
+                    </div>
+                    <div class="form-group">
+                        <label for="logo">Logo</label>
+                        <input type="file"
+                               value="{{ $company->logo }}"
+                               name="logo"
+                               class="form-control"
+                               id="logo">
                     </div>
                     <button type="submit"
                             class="btn btn-primary">Submit

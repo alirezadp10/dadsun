@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use http\Client\Curl\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -15,6 +16,8 @@ class EmployeeTest extends TestCase
      */
     public function employees_can_stored()
     {
+        $this->signIn();
+
         $data = \App\Models\Employee::factory()->raw();
 
         $this->post(route('employee.store'),$data)->assertRedirect(route('employee.index'));
@@ -27,6 +30,8 @@ class EmployeeTest extends TestCase
      */
     public function employees_can_updated()
     {
+        $this->signIn(\App\Models\User::factory(['id' => 2])->create());
+
         $employee = \App\Models\Employee::factory()->create();
 
         $data = \App\Models\Employee::factory()->raw();

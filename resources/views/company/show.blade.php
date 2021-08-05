@@ -8,6 +8,8 @@
 
         <h2 class="mb-3 mt-3">Show Company</h2>
 
+        <img src="{{ $company->logo }}" class="img img-responsive">
+
         <ul class="list-group mt-2">
             <li class="list-group-item">
                 name: {{ $company->name }}

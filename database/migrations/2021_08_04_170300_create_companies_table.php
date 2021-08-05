@@ -18,6 +18,7 @@ class CreateCompaniesTable extends Migration
             $table->string('name');
             $table->string('email')->nullable();
             $table->string('url')->nullable();
+            $table->string('logo')->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });

@@ -6,6 +6,7 @@ use App\Models\Company;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\UploadedFile;
 
 class CompanyFactory extends Factory
 {
@@ -28,6 +29,7 @@ class CompanyFactory extends Factory
             'email'   => $this->faker->email,
             'url'     => $this->faker->url,
             'user_id' => User::factory(),
+            'logo'    => UploadedFile::fake()->image('image.jpg'),
         ];
     }
 }

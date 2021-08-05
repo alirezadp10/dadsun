@@ -2,8 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Models\Company;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class CompaniesTest extends TestCase
@@ -15,9 +19,15 @@ class CompaniesTest extends TestCase
      */
     public function companies_can_stored()
     {
-        $data = \App\Models\Company::factory()->raw();
+        $this->signIn();
+
+        $data = \App\Models\Company::factory(['user_id' => auth()->id()])->raw();
 
         $this->post(route('company.store'),$data)->assertRedirect(route('company.index'));
+
+        $data['logo'] = 'images/company/'.$data['logo']->hashName();
+
+        Storage::disk('public')->assertExists($data['logo']);
 
         $this->assertDatabaseHas('companies',$data);
     }
@@ -27,11 +37,19 @@ class CompaniesTest extends TestCase
      */
     public function companies_can_updated()
     {
-        $company = \App\Models\Company::factory()->create();
+        $this->signIn(User::factory(['id' => 2])->create());
 
-        $data = \App\Models\Company::factory()->raw();
+        $company = \App\Models\Company::factory(['user_id' => auth()->id()])->create();
+
+        $data = \App\Models\Company::factory(['user_id' => auth()->id()])->raw();
 
         $this->patch(route('company.update',$company->id),$data)->assertRedirect(route('company.show',$company->id));
+
+        $data['logo'] = 'images/company/'.$data['logo']->hashName();
+
+        Storage::disk('public')->assertExists($data['logo']);
+
+        Storage::disk('public')->assertMissing($company->logo);
 
         $this->assertDatabaseHas('companies',$data);
     }
